@@ -1,4 +1,4 @@
-package nome.konstantin.gamesys;
+package home.konstantin.gamesys;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,4 +1,4 @@
-package nome.konstantin.gamesys;
+package home.konstantin.gamesys;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
