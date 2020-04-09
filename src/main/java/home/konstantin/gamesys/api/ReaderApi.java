@@ -1,5 +1,6 @@
 package home.konstantin.gamesys.api;
 
+import home.konstantin.gamesys.db.DatabaseShema;
 import home.konstantin.gamesys.model.Rrs;
 import home.konstantin.gamesys.reader.RrsReader;
 import home.konstantin.gamesys.scheduler.SchedulerReader;
@@ -22,6 +23,7 @@ public class ReaderApi {
 
     private final SchedulerReader schedulerReader;
     private final RrsReader rrsReader;
+    private final DatabaseShema databaseShema;
 
     @GetMapping(path = "/enable-scheduler")
     public String enableSender(@RequestParam boolean enabled) {
@@ -44,6 +46,14 @@ public class ReaderApi {
             log.error(logText, e);
         }
         return logText;
+    }
+
+    @GetMapping(path = "/test")
+    public void test() {
+        log.info("DB databaseShema");
+        databaseShema.buildSchema();
+        databaseShema.buildSchema();
+
     }
 
 }
