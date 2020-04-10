@@ -1,28 +1,26 @@
 package home.konstantin.gamesys.db;
 
 import home.konstantin.gamesys.config.ConnectionConfiguration;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
+import home.konstantin.gamesys.enums.RrsEnum;
+import home.konstantin.gamesys.model.Rrs;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
-import org.springframework.util.FileCopyUtils;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.UncheckedIOException;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.sql.Timestamp;
 
+import static home.konstantin.gamesys.utils.Utils.javaDateToLocalDateTime;
+import static home.konstantin.gamesys.utils.Utils.resourceAsString;
+import static java.lang.String.format;
+
+@Slf4j
 @Service
 public class DatabaseShema {
 
@@ -32,108 +30,152 @@ public class DatabaseShema {
     @Value("classpath:migrations/creating-database-scheme.sql")
     private Resource table;
 
-    @Value("classpath:migrations/instert-into-rss.sql")
+    @Value("classpath:migrations/insert-into-rrs.sql")
     private Resource insert;
 
+    @Value("classpath:migrations/select-rss.sql")
+    private Resource select;
 
-    public void buildSchema() {
-        Connection conn = null;
+    //TODO replace with index
+    private int id = 0;
+
+    private Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(
+            connectionConfiguration.getUrl(),
+            connectionConfiguration.getUsername(),
+            connectionConfiguration.getPassword());
+    }
+
+    public List<Rrs> selectRrs(Connection connection) throws SQLException, IOException {
+        List<Rrs> rrsList = new ArrayList<>();
+        String sql = resourceAsString(select);
+        var preparedStatement = connection.prepareStatement(sql);
+        var resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()) {
+            rrsList.add(getRrsFromResultSet(resultSet));
+        }
+        preparedStatement.close();
+        return rrsList;
+    }
+
+    public void insertRrs(Connection connection, Rrs prs) throws SQLException, IOException {
+        var sql = resourceAsString(insert);
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setLong(1, ++id);//TODO - id
+        preparedStatement.setString(2, prs.getTitle());
+        preparedStatement.setString(3, prs.getDescription());
+        preparedStatement.setString(4, prs.getUri());
+        preparedStatement.setTimestamp(5, Timestamp.valueOf(prs.getPublishedDate()));
+        preparedStatement.executeUpdate();
+        preparedStatement.close();
+    }
+
+    public void createRrsTable(Connection connection) throws SQLException, IOException {
+        String sql = resourceAsString(table);
+        var statement =  connection.createStatement();
+        statement.executeUpdate(sql);
+        statement.close();
+    }
+
+    private Rrs getRrsFromResultSet(ResultSet resultSet) throws SQLException {
+        return Rrs.builder().description(resultSet.getNString(RrsEnum.DESCRIPTION.name()))
+            .uri(resultSet.getNString(RrsEnum.URI.name()))
+            .publishedDate(resultSet.getTimestamp(RrsEnum.PUBLISHED_DATE.name()).toLocalDateTime())
+            .title(resultSet.getNString(RrsEnum.TITLE.name()))
+            .build();
+    }
+
+    public List<Rrs> selectRrs() {
+        Connection connection = null;
         Statement stmt = null;
         try {
-            //STEP 2: Register JDBC driver
-            Class.forName(connectionConfiguration.getDriverClassName());
-
-            //STEP 3: Open a connection
-            System.out.println("Connecting to database...");
-            conn = DriverManager.getConnection(
-                connectionConfiguration.getUrl(),
-                connectionConfiguration.getUsername(),
-                connectionConfiguration.getPassword());
-
-            //STEP 4: Execute a query
-            System.out.println("Creating database...");
-            stmt = conn.createStatement();
-
-            String sql = asString(table);
-            System.out.println("SQL = " + sql);
-            stmt.executeUpdate(sql);
-            System.out.println("Database SHEMA successfully...");
-
-            sql = asString(insert);
-            System.out.println("SQL = " + sql);
-            stmt.executeUpdate(sql);
-            System.out.println("Database insert...");
-
-            PreparedStatement s1 = conn.prepareStatement("select * from " + "rrs");
-            ResultSet rs = s1.executeQuery();
-            ResultSetMetaData meta = rs.getMetaData();
-            while (rs.next()) {
-                for (int i = 1; i <= meta.getColumnCount(); i++){
-                    System.out.println("select = " + rs.getObject(i));
-                }
-            }
-            System.out.println("Database select...");
-
+            //Class.forName(connectionConfiguration.getDriverClassName());
+            connection = getConnection();
+            return selectRrs(connection);
         } catch (SQLException se) {
-            //Handle errors for JDBC
             se.printStackTrace();
         } catch (Exception e) {
-            //Handle errors for Class.forName
             e.printStackTrace();
         } finally {
-            //finally block used to close resources
             try {
                 if (stmt != null) {
                     stmt.close();
                 }
             } catch (SQLException se2) {
-            }// nothing we can do
+            }
             try {
-                if (conn != null) {
-                    conn.close();
+                if (connection != null) {
+                    connection.close();
                 }
             } catch (SQLException se) {
                 se.printStackTrace();
-            }//end finally try
-        }//end try
-        System.out.println("Goodbye!");
-    }//end main
-
-    public String asString(Resource resource) {
-        try (Reader reader = new InputStreamReader(resource.getInputStream())) {
-            return FileCopyUtils.copyToString(reader);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    }
-
-    public void copy(String table, Connection from, Connection to) throws SQLException {
-        try (PreparedStatement s1 = from.prepareStatement("select * from " + table);
-            ResultSet rs = s1.executeQuery()) {
-            ResultSetMetaData meta = rs.getMetaData();
-
-            List<String> columns = new ArrayList<>();
-            for (int i = 1; i <= meta.getColumnCount(); i++)
-                columns.add(meta.getColumnName(i));
-
-            try (PreparedStatement s2 = to.prepareStatement(
-                "INSERT INTO " + table + " ("
-                    + columns.stream().collect(Collectors.joining(", "))
-                    + ") VALUES ("
-                    + columns.stream().map(c -> "?").collect(Collectors.joining(", "))
-                    + ")"
-            )) {
-
-                while (rs.next()) {
-                    for (int i = 1; i <= meta.getColumnCount(); i++)
-                        s2.setObject(i, rs.getObject(i));
-
-                    s2.addBatch();
-                }
-
-                s2.executeBatch();
             }
         }
+        return List.of();
+    }
+
+    public void insertRrs() {
+        Connection connection = null;
+        Statement stmt = null;
+        try {
+            //Class.forName(connectionConfiguration.getDriverClassName());
+            connection = getConnection();
+            insertRrs(connection, Rrs.builder().description("3333").title("tttt").uri("54645645").publishedDate(
+                LocalDateTime.now()).build());
+
+            connection.commit();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+            } catch (SQLException se2) {
+            }
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+        System.out.println("Goodbye!");
+    }
+
+    public void buildSchema() {
+        Connection connection = null;
+        Statement stmt = null;
+        try {
+
+            //Class.forName(connectionConfiguration.getDriverClassName());
+            connection = getConnection();
+            createRrsTable(connection);
+
+            connection.commit();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+            } catch (SQLException se2) {
+            }
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+        System.out.println("Goodbye!");
     }
 
 }

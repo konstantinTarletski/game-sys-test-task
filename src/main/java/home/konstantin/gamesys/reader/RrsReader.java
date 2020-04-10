@@ -12,12 +12,10 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static home.konstantin.gamesys.utils.Utils.javaDateToLocalDateTime;
 
 @Service
 @Slf4j
@@ -44,16 +42,9 @@ public class RrsReader {
     protected Rrs getRrsFromSyndEntry(SyndEntry entry) {
         return Rrs.builder()
             .title(entry.getTitle())
-            .publishedDate(dateToLocalDateTime(entry.getPublishedDate()))
+            .publishedDate(javaDateToLocalDateTime(entry.getPublishedDate()))
             .uri(entry.getUri())
             .description(entry.getDescription() == null ? null : entry.getDescription().getValue()).build();
     }
-
-    protected LocalDateTime dateToLocalDateTime(Date dateToConvert) {
-        return dateToConvert == null ? null: dateToConvert.toInstant()
-            .atZone(ZoneId.systemDefault())
-            .toLocalDateTime();
-    }
-
 
 }

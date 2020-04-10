@@ -23,7 +23,6 @@ public class SchedulerReader {
 
     @Scheduled(fixedDelayString = "${test-data.rrs.source.schedule.fixed-delay}", initialDelay = 1000)
     public void scheduler() {
-        log.info("Entering scheduler, enabled = {}", enabled);
         if (enabled) {
             try {
                 rrsReader.read();

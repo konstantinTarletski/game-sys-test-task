@@ -34,7 +34,7 @@ public class ReaderApi {
     }
 
     @GetMapping(path = "/read-rss")
-    public String publishMessage() {
+    public String readRss() {
         log.info("Start reading rrs");
         String logText;
         try{
@@ -48,12 +48,23 @@ public class ReaderApi {
         return logText;
     }
 
-    @GetMapping(path = "/test")
-    public void test() {
-        log.info("DB databaseShema");
+    //TODO delete -- only for testing
+    @GetMapping(path = "/create-table")
+    public void insert() {
+        log.info("DB insert");
         databaseShema.buildSchema();
-        databaseShema.buildSchema();
+    }
 
+    //TODO delete -- only for testing
+    @GetMapping(path = "/insert-rrs")
+    public void insertRrs() {
+        databaseShema.insertRrs();
+    }
+
+    @GetMapping(path = "/read-last-items")
+    public List<Rrs> readLastItems(@RequestParam int number) {
+        log.info("Reading last {} from database", number);
+        return databaseShema.selectRrs();
     }
 
 }

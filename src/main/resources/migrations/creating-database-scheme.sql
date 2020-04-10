@@ -1,6 +1,6 @@
-set schema PUBLIC;
+SET SCHEMA PUBLIC;
 
-create table rrs (
+CREATE TABLE rrs (
     id BIGINT NOT NULL,-- DEFAULT NEXTVAL(('"rrs_id_seq"' :: TEXT) :: REGCLASS),
     title VARCHAR(100) NOT NULL,
     description VARCHAR(1000) NOT NULL,
