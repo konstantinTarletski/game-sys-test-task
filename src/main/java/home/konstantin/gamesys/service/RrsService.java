@@ -26,18 +26,18 @@ public class RrsService {
     //TODO replace with index
     private int id = 0;
 
-     void process(){
-        databaseShema.executeAnySql("", resultProcessor(), parametersProcessor() );
+    void process() {
+        databaseShema.executeAnySql("", resultProcessor(), parametersProcessor());
     }
 
     public BiFunction<Rrs, PreparedStatement, PreparedStatement> parametersProcessor() {
         return (rrs, preparedStatement) -> {
             try {
-            preparedStatement.setLong(1, ++id);//TODO - id
-            preparedStatement.setString(2, rrs.getTitle());
-            preparedStatement.setString(3, rrs.getDescription());
-            preparedStatement.setString(4, rrs.getUri());
-            preparedStatement.setTimestamp(5, Timestamp.valueOf(rrs.getPublishedDate()));
+                preparedStatement.setLong(1, ++id);//TODO - id
+                preparedStatement.setString(2, rrs.getTitle());
+                preparedStatement.setString(3, rrs.getDescription());
+                preparedStatement.setString(4, rrs.getUri());
+                preparedStatement.setTimestamp(5, Timestamp.valueOf(rrs.getPublishedDate()));
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -46,17 +46,17 @@ public class RrsService {
     }
 
     public Function<ResultSet, List<Rrs>> resultProcessor() {
-         return resultSet -> {
-             List<Rrs> rrsList = new ArrayList<>();
-                 try {
-                     while (resultSet.next()) {
-                         rrsList.add(getRrsFromResultSet(resultSet));
-                     }
-                 } catch (SQLException e) {
-                     e.printStackTrace();
-                 }
-             return rrsList;
-         };
+        return resultSet -> {
+            List<Rrs> rrsList = new ArrayList<>();
+            try {
+                while (resultSet.next()) {
+                    rrsList.add(getRrsFromResultSet(resultSet));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return rrsList;
+        };
     }
 
     private Rrs getRrsFromResultSet(ResultSet resultSet) throws SQLException {
