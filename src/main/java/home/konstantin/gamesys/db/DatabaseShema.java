@@ -15,6 +15,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.Timestamp;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import static home.konstantin.gamesys.utils.Utils.javaDateToLocalDateTime;
 import static home.konstantin.gamesys.utils.Utils.resourceAsString;
@@ -44,6 +46,34 @@ public class DatabaseShema {
             connectionConfiguration.getUrl(),
             connectionConfiguration.getUsername(),
             connectionConfiguration.getPassword());
+    }
+
+    public <R,I> List<R> executeAnySql(String sql, Function<ResultSet,List<R>> resultProcessor, BiFunction<R,PreparedStatement, PreparedStatement> parametersProcessor){
+        Connection connection = null;
+        Statement stmt = null;
+        try {
+            //Class.forName(connectionConfiguration.getDriverClassName());
+            connection = getConnection();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+            } catch (SQLException se2) {
+            }
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+        return new ArrayList<R>();
     }
 
     public List<Rrs> selectRrs(Connection connection) throws SQLException, IOException {
