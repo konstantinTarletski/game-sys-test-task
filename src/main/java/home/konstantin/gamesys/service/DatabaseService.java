@@ -23,17 +23,17 @@ public class DatabaseService {
 
     private final DatabaseManager databaseManager;
 
-    @Value("classpath:migrations/creating-database-scheme.sql")
+    @Value("classpath:sql/creating-database-scheme.sql")
     private Resource table;
 
-    @Value("classpath:migrations/insert-into-rrs.sql")
+    @Value("classpath:sql/insert-into-rrs.sql")
     private Resource insert;
 
-    @Value("classpath:migrations/select-rss.sql")
+    @Value("classpath:sql/select-rss.sql")
     private Resource select;
 
     @PostConstruct
-    public void handleMultipleEvents() {
+    public void cratingDatabaseSchema() {
         log.info("Creating database schema");
         databaseManager.executeSql(table, null, null, null);
     }
