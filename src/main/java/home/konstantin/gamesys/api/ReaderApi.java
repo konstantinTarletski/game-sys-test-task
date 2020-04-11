@@ -1,9 +1,9 @@
 package home.konstantin.gamesys.api;
 
-import home.konstantin.gamesys.db.DatabaseShema;
 import home.konstantin.gamesys.model.Rrs;
 import home.konstantin.gamesys.reader.RrsReader;
 import home.konstantin.gamesys.scheduler.SchedulerReader;
+import home.konstantin.gamesys.service.RrsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +23,7 @@ public class ReaderApi {
 
     private final SchedulerReader schedulerReader;
     private final RrsReader rrsReader;
-    private final DatabaseShema databaseShema;
+    private final RrsService rrsService;
 
     @GetMapping(path = "/enable-scheduler")
     public String enableSender(@RequestParam boolean enabled) {
@@ -52,19 +52,19 @@ public class ReaderApi {
     @GetMapping(path = "/create-table")
     public void insert() {
         log.info("DB insert");
-        databaseShema.buildSchema();
+        rrsService.createTable();
     }
 
     //TODO delete -- only for testing
     @GetMapping(path = "/insert-rrs")
     public void insertRrs() {
-        databaseShema.insertRrs();
+        rrsService.insertRow();
     }
 
     @GetMapping(path = "/read-last-items")
     public List<Rrs> readLastItems(@RequestParam int number) {
         log.info("Reading last {} from database", number);
-        return databaseShema.selectRrs();
+        return rrsService.readData();
     }
 
 }

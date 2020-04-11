@@ -1,4 +1,4 @@
 INSERT INTO rrs
-    (id, title, description, uri, published_date)
+    (title, description, uri, published_date)
 VALUES
-    (?, ?, ?, ?, ?);
+    (?, ?, ?, ?);
