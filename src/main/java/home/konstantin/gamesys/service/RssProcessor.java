@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class RrsProcessor {
+public class RssProcessor {
 
     private final int DB_ROW_LENGHT = 1000;
 
