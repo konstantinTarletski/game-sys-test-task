@@ -1,0 +1,17 @@
+version: '3'
+
+networks:
+  default:
+
+services:
+
+  rss-reader:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: game-sys
+    ports:
+      - 8815:8815
+      - 9090:9090
+    networks:
+      - default

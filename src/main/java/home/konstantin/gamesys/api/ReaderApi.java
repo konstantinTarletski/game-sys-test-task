@@ -1,7 +1,6 @@
 package home.konstantin.gamesys.api;
 
 import home.konstantin.gamesys.model.Rrs;
-import home.konstantin.gamesys.service.RrsReader;
 import home.konstantin.gamesys.scheduler.SchedulerReader;
 import home.konstantin.gamesys.service.DatabaseService;
 import home.konstantin.gamesys.service.RrsService;
@@ -23,7 +22,6 @@ import static java.lang.String.format;
 public class ReaderApi {
 
     private final SchedulerReader schedulerReader;
-    private final RrsReader rrsReader;
     private final RrsService rrsService;
     private final DatabaseService databaseService;
 
@@ -35,31 +33,15 @@ public class ReaderApi {
         return logText;
     }
 
-    @GetMapping(path = "/read-rss")
-    public String readRss() {
-        log.info("Start reading rrs");
-        String logText;
-        try{
-            List<Rrs> rrsList = rrsReader.read();
-            logText = format("Reading rrs completed, get %d items", rrsList.size());
-            log.info(logText);
-        }catch (Exception e){
-            logText = format("Error while reading rrs = %s ", e.getMessage());
-            log.error(logText, e);
-        }
-        return logText;
-    }
-
-    //TODO delete -- only for testing
     @GetMapping(path = "/process-rrs")
     public void insertRrs() {
-        log.info("DB insert-rrs");
+        log.info("Processing RRS manually");
         rrsService.processRrs();
     }
 
     @GetMapping(path = "/read-last-items")
-    public List<Rrs> readLastItems(@RequestParam int number) {
-        log.info("Reading last {} from database", number);
+    public List<Rrs> readLastItems() {
+        log.info("Reading last 10 rows from database");
         return databaseService.readData();
     }
 

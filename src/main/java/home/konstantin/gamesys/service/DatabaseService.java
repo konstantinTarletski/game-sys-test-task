@@ -50,7 +50,7 @@ public class DatabaseService {
         }, null);
     }
 
-    public List<Rrs> readData(int number) {
+    public List<Rrs> readData() {
         return databaseManager.executeSql(select, null, null, resultSet ->
             Rrs.builder()
                 .description(resultSet.getNString(RrsEnum.DESCRIPTION.name()))
