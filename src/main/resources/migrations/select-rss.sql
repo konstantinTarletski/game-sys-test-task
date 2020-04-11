@@ -1,1 +1,1 @@
-SELECT * FROM RRS
+SELECT * FROM rrs ORDER BY inserted_date DESC LIMIT ?

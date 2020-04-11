@@ -4,7 +4,7 @@ import home.konstantin.gamesys.config.ConnectionConfiguration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -17,7 +17,7 @@ import static home.konstantin.gamesys.utils.Utils.resourceAsString;
 import static java.lang.String.format;
 
 @Slf4j
-@Service
+@Component
 @RequiredArgsConstructor
 public class DatabaseManager {
 
@@ -30,23 +30,26 @@ public class DatabaseManager {
             connectionConfiguration.getPassword());
     }
 
-    public <T> List<T> executeSql(Resource sql, T parameters,
-        StatementParameterPopulator<T> statementParameterPopulator, ResultSetReader<T> resultSetReader
+    public <T> List<T> executeSql(Resource sql, List<T> parameters, StatementParameterPopulator<T> populator,
+        ResultSetReader<T> resultSetReader
     ) {
         List<T> result = new ArrayList<>();
         try (var connection = getConnection();
             var preparedStatement = connection.prepareStatement(resourceAsString(sql))
         ) {
-            if (statementParameterPopulator != null && parameters != null) {
-                statementParameterPopulator.populate(preparedStatement, parameters);
-            }
-            if (resultSetReader == null) {
-                preparedStatement.executeUpdate();
-            } else {
+            if (populator != null && parameters != null) {
+                for (var parameter : parameters) {
+                    populator.populate(preparedStatement, parameter);
+                    preparedStatement.addBatch();
+                }
+                preparedStatement.executeBatch();
+            }else if (resultSetReader != null) {
                 var resultSet = preparedStatement.executeQuery();
                 while (resultSet.next()) {
                     result.add(resultSetReader.read(resultSet));
                 }
+            } else {
+                preparedStatement.executeUpdate();
             }
         } catch (SQLException | IOException e) {
             String logText = format("There was error while executing SQL, error message is %s", e.getMessage());

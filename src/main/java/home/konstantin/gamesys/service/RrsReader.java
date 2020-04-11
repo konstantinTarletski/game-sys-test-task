@@ -1,4 +1,4 @@
-package home.konstantin.gamesys.reader;
+package home.konstantin.gamesys.service;
 
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
@@ -16,27 +16,32 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static home.konstantin.gamesys.utils.Utils.javaDateToLocalDateTime;
+import static java.lang.String.format;
 
-@Service
 @Slf4j
+@Service
 public class RrsReader {
 
     @Value("${test-data.rrs.source}")
     private String url;
 
-    public List<Rrs> read() throws IOException, IllegalArgumentException, FeedException {
+    public List<Rrs> read() {
         log.info("Entering reading rrs from URL = {}", url);
+        try (XmlReader reader = new XmlReader(new URL(url))){
+            SyndFeed feed = new SyndFeedInput().build(reader);
+            var entryList = feed.getEntries();
 
-        XmlReader reader = new XmlReader(new URL(url));
-        SyndFeed feed = new SyndFeedInput().build(reader);
-        var entryList = feed.getEntries();
+            log.info("Rrs entries reading completed title is = {}, total entries is = {}",
+                feed.getTitle(), entryList.size());
 
-        log.info("Rrs entries reading completed title is = {}, total entries is = {}",
-            feed.getTitle(), entryList.size());
-
-        return entryList.stream()
-            .map(entry -> getRrsFromSyndEntry(entry))
-            .collect(Collectors.toList());
+            return entryList.stream()
+                .map(entry -> getRrsFromSyndEntry(entry))
+                .collect(Collectors.toList());
+        }catch (IOException | FeedException e){
+            String logText = format("There was error while reading RRS, error message is %s", e.getMessage());
+            log.error(logText, e);
+        }
+        return List.of();
     }
 
     protected Rrs getRrsFromSyndEntry(SyndEntry entry) {

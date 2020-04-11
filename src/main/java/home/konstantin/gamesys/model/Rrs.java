@@ -17,5 +17,6 @@ public class Rrs {
     private String description;
     private LocalDateTime publishedDate;
     private String uri;
+    private LocalDateTime insertedDate;
 
 }
