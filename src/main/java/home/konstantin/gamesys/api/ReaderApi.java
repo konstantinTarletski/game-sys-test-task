@@ -28,15 +28,17 @@ public class ReaderApi {
     @GetMapping(path = "/enable-scheduler")
     public String enableSender(@RequestParam boolean enabled) {
         schedulerReader.setEnabled(enabled);
-        String logText = format("Scheduler status now = %s", schedulerReader.isEnabled());
+        var logText = format("Scheduler status now = %s", schedulerReader.isEnabled());
         log.info(logText);
         return logText;
     }
 
     @GetMapping(path = "/process-rrs")
-    public void insertRrs() {
-        log.info("Processing RRS manually");
+    public String insertRrs() {
+        var logText = "Processing RRS manually";
+        log.info(logText);
         rrsService.processRrs();
+        return logText;
     }
 
     @GetMapping(path = "/read-last-items")
