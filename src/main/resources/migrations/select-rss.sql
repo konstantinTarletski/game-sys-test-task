@@ -1,1 +1,1 @@
-SELECT * FROM rrs ORDER BY inserted_date DESC LIMIT 10
+SELECT * FROM rss ORDER BY inserted_date DESC LIMIT 10

@@ -1,6 +1,6 @@
 package home.konstantin.gamesys.service;
 
-import home.konstantin.gamesys.model.Rrs;
+import home.konstantin.gamesys.model.Rss;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -10,10 +10,10 @@ public class RrsProcessor {
 
     private final int DB_ROW_LENGHT = 1000;
 
-    public Rrs processRrs(Rrs rrs){
-        rrs.setTitle(processTitle(rrs.getTitle()));
-        rrs.setDescription(processDescription(rrs.getDescription()));
-        return rrs;
+    public Rss processRrs(Rss rss){
+        rss.setTitle(processTitle(rss.getTitle()));
+        rss.setDescription(processDescription(rss.getDescription()));
+        return rss;
     }
 
     private String processTitle(String title){

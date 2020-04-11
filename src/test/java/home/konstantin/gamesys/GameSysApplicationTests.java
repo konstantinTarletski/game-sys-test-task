@@ -1,6 +1,6 @@
 package home.konstantin.gamesys;
 
-import home.konstantin.gamesys.model.Rrs;
+import home.konstantin.gamesys.model.Rss;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -13,8 +13,8 @@ class GameSysApplicationTests {
 	void contextLoads() {
 	}
 
-	public Rrs getRrs(){
-		return Rrs.builder().description("3333").title("tttt").uri("54645645").publishedDate(
+	public Rss getRrs(){
+		return Rss.builder().description("3333").title("tttt").uri("54645645").publishedDate(
 			LocalDateTime.now()).build();
 	}
 

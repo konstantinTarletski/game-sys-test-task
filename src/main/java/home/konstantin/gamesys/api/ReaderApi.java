@@ -1,6 +1,6 @@
 package home.konstantin.gamesys.api;
 
-import home.konstantin.gamesys.model.Rrs;
+import home.konstantin.gamesys.model.Rss;
 import home.konstantin.gamesys.scheduler.SchedulerReader;
 import home.konstantin.gamesys.service.DatabaseService;
 import home.konstantin.gamesys.service.RrsService;
@@ -42,7 +42,7 @@ public class ReaderApi {
     }
 
     @GetMapping(path = "/read-last-items")
-    public List<Rrs> readLastItems() {
+    public List<Rss> readLastItems() {
         log.info("Reading last 10 rows from database");
         return databaseService.readData();
     }

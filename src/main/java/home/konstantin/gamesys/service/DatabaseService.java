@@ -2,7 +2,7 @@ package home.konstantin.gamesys.service;
 
 import home.konstantin.gamesys.db.DatabaseManager;
 import home.konstantin.gamesys.enums.RrsEnum;
-import home.konstantin.gamesys.model.Rrs;
+import home.konstantin.gamesys.model.Rss;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,8 +38,8 @@ public class DatabaseService {
         databaseManager.executeSql(table, null, null, null);
     }
 
-    public void insertRows(List<Rrs> rrsList) {
-        databaseManager.executeSql(insert, rrsList, (preparedStatement, rrs) -> {
+    public void insertRows(List<Rss> rssList) {
+        databaseManager.executeSql(insert, rssList, (preparedStatement, rrs) -> {
             preparedStatement.setString(1, rrs.getTitle());
             preparedStatement.setString(2, rrs.getDescription());
             preparedStatement.setString(3, rrs.getUri());
@@ -50,9 +50,9 @@ public class DatabaseService {
         }, null);
     }
 
-    public List<Rrs> readData() {
+    public List<Rss> readData() {
         return databaseManager.executeSql(select, null, null, resultSet ->
-            Rrs.builder()
+            Rss.builder()
                 .description(resultSet.getNString(RrsEnum.DESCRIPTION.name()))
                 .uri(resultSet.getNString(RrsEnum.URI.name()))
                 .publishedDate(getDate(resultSet, RrsEnum.PUBLISHED_DATE))
