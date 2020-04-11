@@ -19,7 +19,10 @@ public class Utils {
     }
 
     public static String resourceAsString(Resource resource) throws IOException {
-        Reader reader = new InputStreamReader(resource.getInputStream());
+        if(resource == null || !resource.exists()){
+            return null;
+        }
+        var reader = new InputStreamReader(resource.getInputStream());
         return FileCopyUtils.copyToString(reader);
     }
 

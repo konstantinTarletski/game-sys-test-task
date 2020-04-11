@@ -13,12 +13,12 @@ public class RssService {
 
     private final RssReader rssReader;
     private final DatabaseService databaseService;
-    private final RrsProcessor rrsProcessor;
+    private final RssProcessor rssProcessor;
 
     public void processRss() {
         databaseService.insertRows(
             rssReader.read().stream()
-                .map(rrsProcessor::processRss)
+                .map(rssProcessor::processRss)
                 .collect(Collectors.toList()));
 
     }
