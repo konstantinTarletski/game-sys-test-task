@@ -1,7 +1,6 @@
 package home.konstantin.gamesys.scheduler;
 
-import home.konstantin.gamesys.service.RrsReader;
-import home.konstantin.gamesys.service.RrsService;
+import home.konstantin.gamesys.service.RssService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -16,7 +15,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class SchedulerReader {
 
-    private final RrsService rrsService;
+    private final RssService rssService;
 
     @Getter
     @Setter
@@ -26,7 +25,7 @@ public class SchedulerReader {
     public void scheduler() {
         if (enabled) {
             try {
-                rrsService.processRrs();
+                rssService.processRss();
             }catch (Exception e){
                 log.error("Error while reading rrs", e);
             }

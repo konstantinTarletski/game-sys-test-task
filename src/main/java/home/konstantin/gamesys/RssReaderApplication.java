@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class GameSysApplication {
+public class RssReaderApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(GameSysApplication.class, args);
+		SpringApplication.run(RssReaderApplication.class, args);
 	}
 
 }

@@ -23,7 +23,7 @@ This application have API to control it and view results.
 ## Rss-reader API
 
 * To process RSS news manually you can call this endpoint :
-    `GET http://localhost:8815/api/api/rss-reader/process-rrs`.
+    `GET http://localhost:8815/api/api/rss-reader/process-rss`.
     It will execute same logic, that scheduler do. But only once.
 
 * To enable/disable scheduler for reading RSS news from you can use this endpoint.

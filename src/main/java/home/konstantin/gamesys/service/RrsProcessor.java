@@ -10,9 +10,10 @@ public class RrsProcessor {
 
     private final int DB_ROW_LENGHT = 1000;
 
-    public Rss processRrs(Rss rss){
+    public Rss processRss(Rss rss){
         rss.setTitle(processTitle(rss.getTitle()));
         rss.setDescription(processDescription(rss.getDescription()));
+        rss.setUri(trimToSize(rss.getUri()));
         return rss;
     }
 

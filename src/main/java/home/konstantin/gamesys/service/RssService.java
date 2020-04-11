@@ -9,16 +9,16 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class RrsService {
+public class RssService {
 
-    private final RrsReader rrsReader;
+    private final RssReader rssReader;
     private final DatabaseService databaseService;
     private final RrsProcessor rrsProcessor;
 
-    public void processRrs() {
+    public void processRss() {
         databaseService.insertRows(
-            rrsReader.read().stream()
-                .map(rrsProcessor::processRrs)
+            rssReader.read().stream()
+                .map(rrsProcessor::processRss)
                 .collect(Collectors.toList()));
 
     }

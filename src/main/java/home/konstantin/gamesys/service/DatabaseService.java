@@ -1,7 +1,7 @@
 package home.konstantin.gamesys.service;
 
 import home.konstantin.gamesys.db.DatabaseManager;
-import home.konstantin.gamesys.enums.RrsEnum;
+import home.konstantin.gamesys.enums.RssEnum;
 import home.konstantin.gamesys.model.Rss;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,12 +39,12 @@ public class DatabaseService {
     }
 
     public void insertRows(List<Rss> rssList) {
-        databaseManager.executeSql(insert, rssList, (preparedStatement, rrs) -> {
-            preparedStatement.setString(1, rrs.getTitle());
-            preparedStatement.setString(2, rrs.getDescription());
-            preparedStatement.setString(3, rrs.getUri());
+        databaseManager.executeSql(insert, rssList, (preparedStatement, rss) -> {
+            preparedStatement.setString(1, rss.getTitle());
+            preparedStatement.setString(2, rss.getDescription());
+            preparedStatement.setString(3, rss.getUri());
             preparedStatement.setTimestamp(4,
-                rrs.getPublishedDate() == null ? null : Timestamp.valueOf(rrs.getPublishedDate())
+                rss.getPublishedDate() == null ? null : Timestamp.valueOf(rss.getPublishedDate())
             );
             preparedStatement.setTimestamp(5, Timestamp.valueOf(LocalDateTime.now()));
         }, null);
@@ -53,17 +53,17 @@ public class DatabaseService {
     public List<Rss> readData() {
         return databaseManager.executeSql(select, null, null, resultSet ->
             Rss.builder()
-                .description(resultSet.getNString(RrsEnum.DESCRIPTION.name()))
-                .uri(resultSet.getNString(RrsEnum.URI.name()))
-                .publishedDate(getDate(resultSet, RrsEnum.PUBLISHED_DATE))
-                .title(resultSet.getNString(RrsEnum.TITLE.name()))
-                .insertedDate(getDate(resultSet, RrsEnum.INSERTED_DATE))
+                .description(resultSet.getNString(RssEnum.DESCRIPTION.name()))
+                .uri(resultSet.getNString(RssEnum.URI.name()))
+                .publishedDate(getDate(resultSet, RssEnum.PUBLISHED_DATE))
+                .title(resultSet.getNString(RssEnum.TITLE.name()))
+                .insertedDate(getDate(resultSet, RssEnum.INSERTED_DATE))
                 .build()
         );
     }
 
-    private LocalDateTime getDate(ResultSet resultSet, RrsEnum rrsEnum) throws SQLException {
-        var date = resultSet.getTimestamp(rrsEnum.name());
+    private LocalDateTime getDate(ResultSet resultSet, RssEnum rssEnum) throws SQLException {
+        var date = resultSet.getTimestamp(rssEnum.name());
         return date == null ? null : date.toLocalDateTime();
     }
 

@@ -3,7 +3,7 @@ package home.konstantin.gamesys.api;
 import home.konstantin.gamesys.model.Rss;
 import home.konstantin.gamesys.scheduler.SchedulerReader;
 import home.konstantin.gamesys.service.DatabaseService;
-import home.konstantin.gamesys.service.RrsService;
+import home.konstantin.gamesys.service.RssService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +22,7 @@ import static java.lang.String.format;
 public class ReaderApi {
 
     private final SchedulerReader schedulerReader;
-    private final RrsService rrsService;
+    private final RssService rssService;
     private final DatabaseService databaseService;
 
     @GetMapping(path = "/enable-scheduler")
@@ -33,11 +33,11 @@ public class ReaderApi {
         return logText;
     }
 
-    @GetMapping(path = "/process-rrs")
+    @GetMapping(path = "/process-rss")
     public String insertRrs() {
         var logText = "Processing RRS manually";
         log.info(logText);
-        rrsService.processRrs();
+        rssService.processRss();
         return logText;
     }
 

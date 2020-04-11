@@ -20,7 +20,7 @@ import static java.lang.String.format;
 
 @Slf4j
 @Service
-public class RrsReader {
+public class RssReader {
 
     @Value("${test-data.rrs.source}")
     private String url;
@@ -35,7 +35,7 @@ public class RrsReader {
                 feed.getTitle(), entryList.size());
 
             return entryList.stream()
-                .map(entry -> getRrsFromSyndEntry(entry))
+                .map(entry -> getRssFromSyndEntry(entry))
                 .collect(Collectors.toList());
         }catch (IOException | FeedException e){
             String logText = format("There was error while reading RRS, error message is %s", e.getMessage());
@@ -44,7 +44,7 @@ public class RrsReader {
         return List.of();
     }
 
-    protected Rss getRrsFromSyndEntry(SyndEntry entry) {
+    protected Rss getRssFromSyndEntry(SyndEntry entry) {
         return Rss.builder()
             .title(entry.getTitle())
             .publishedDate(javaDateToLocalDateTime(entry.getPublishedDate()))
