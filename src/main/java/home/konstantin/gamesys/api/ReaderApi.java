@@ -2,7 +2,7 @@ package home.konstantin.gamesys.api;
 
 import home.konstantin.gamesys.model.Rss;
 import home.konstantin.gamesys.scheduler.SchedulerReader;
-import home.konstantin.gamesys.service.DatabaseService;
+import home.konstantin.gamesys.repository.DatabaseService;
 import home.konstantin.gamesys.service.RssService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

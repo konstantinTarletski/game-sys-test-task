@@ -1,5 +1,6 @@
 package home.konstantin.gamesys.service;
 
+import home.konstantin.gamesys.repository.DatabaseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

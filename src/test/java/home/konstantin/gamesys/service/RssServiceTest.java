@@ -1,6 +1,7 @@
 package home.konstantin.gamesys.service;
 
 import home.konstantin.gamesys.model.Rss;
+import home.konstantin.gamesys.repository.DatabaseService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;

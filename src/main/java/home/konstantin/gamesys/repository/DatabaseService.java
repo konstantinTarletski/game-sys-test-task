@@ -1,4 +1,4 @@
-package home.konstantin.gamesys.service;
+package home.konstantin.gamesys.repository;
 
 import home.konstantin.gamesys.db.SqlInsert;
 import home.konstantin.gamesys.db.SqlSelect;
