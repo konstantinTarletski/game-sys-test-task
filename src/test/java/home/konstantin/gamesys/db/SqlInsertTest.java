@@ -31,6 +31,8 @@ import static org.mockito.Mockito.when;
 @PrepareForTest(Utils.class)
 public class SqlInsertTest {
 
+    private final String TEST_SQL = "ABC";
+
     private SqlInsert sqlInsert;
 
     @Mock
@@ -50,7 +52,7 @@ public class SqlInsertTest {
         MockitoAnnotations.initMocks(this);
 
         PowerMockito.mockStatic(Utils.class);
-        when(Utils.resourceAsString(resource)).thenReturn("ABC");
+        when(Utils.resourceAsString(resource)).thenReturn(TEST_SQL);
 
         sqlInsert = new SqlInsert(connectionConfiguration);
         sqlInsert = Mockito.spy(sqlInsert);
@@ -61,7 +63,7 @@ public class SqlInsertTest {
     public void testInsert() throws Exception {
         var rss = getRrs();
         var rssList = List.of(rss);
-        when(connection.prepareStatement("ABC")).thenReturn(preparedStatement);
+        when(connection.prepareStatement(TEST_SQL)).thenReturn(preparedStatement);
         sqlInsert.insert(resource, rssList, (t, s) -> {});
         verify(preparedStatement, times(1)).addBatch();
         verify(preparedStatement, times(1)).executeBatch();

@@ -28,6 +28,8 @@ import static org.mockito.Mockito.when;
 @PrepareForTest(Utils.class)
 public class SqlUpdateTest {
 
+    private final String TEST_SQL = "ABC";
+
     private SqlUpdate sqlUpdate;
 
     @Mock
@@ -47,7 +49,7 @@ public class SqlUpdateTest {
         MockitoAnnotations.initMocks(this);
 
         PowerMockito.mockStatic(Utils.class);
-        when(Utils.resourceAsString(resource)).thenReturn("ABC");
+        when(Utils.resourceAsString(resource)).thenReturn(TEST_SQL);
 
         sqlUpdate = new SqlUpdate(connectionConfiguration);
         sqlUpdate = Mockito.spy(sqlUpdate);
@@ -56,7 +58,7 @@ public class SqlUpdateTest {
 
     @Test
     public void testUpdate() throws Exception {
-        when(connection.prepareStatement("ABC")).thenReturn(preparedStatement);
+        when(connection.prepareStatement(TEST_SQL)).thenReturn(preparedStatement);
         sqlUpdate.update(resource);
         verify(preparedStatement, times(1)).executeUpdate();
     }

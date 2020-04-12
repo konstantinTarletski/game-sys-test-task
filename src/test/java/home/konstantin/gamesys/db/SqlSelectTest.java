@@ -37,6 +37,8 @@ import static org.mockito.Mockito.when;
 @PrepareForTest(Utils.class)
 public class SqlSelectTest {
 
+    private final String TEST_SQL = "ABC";
+
     private SqlSelect sqlSelect;
 
     @Mock
@@ -59,7 +61,7 @@ public class SqlSelectTest {
         MockitoAnnotations.initMocks(this);
 
         PowerMockito.mockStatic(Utils.class);
-        when(Utils.resourceAsString(resource)).thenReturn("ABC");
+        when(Utils.resourceAsString(resource)).thenReturn(TEST_SQL);
 
         sqlSelect = new SqlSelect(connectionConfiguration);
         sqlSelect = Mockito.spy(sqlSelect);
@@ -69,7 +71,7 @@ public class SqlSelectTest {
     @Test
     public void testSelect() throws Exception {
         var rss = getRrs();
-        when(connection.prepareStatement("ABC")).thenReturn(preparedStatement);
+        when(connection.prepareStatement(TEST_SQL)).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
         when(resultSet.next()).thenAnswer(
             new Answer<Boolean>() {
