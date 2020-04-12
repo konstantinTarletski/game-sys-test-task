@@ -1,6 +1,8 @@
 package home.konstantin.gamesys.service;
 
-import home.konstantin.gamesys.db.DatabaseManager;
+import home.konstantin.gamesys.db.SqlInsert;
+import home.konstantin.gamesys.db.SqlSelect;
+import home.konstantin.gamesys.db.SqlUpdate;
 import home.konstantin.gamesys.enums.RssEnum;
 import home.konstantin.gamesys.model.Rss;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +23,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DatabaseService {
 
-    private final DatabaseManager databaseManager;
+    private final SqlInsert sqlInsert;
+    private final SqlUpdate sqlUpdate;
+    private final SqlSelect sqlSelect;
 
     @Value("classpath:sql/creating-database-scheme.sql")
     private Resource table;
@@ -35,11 +39,11 @@ public class DatabaseService {
     @PostConstruct
     public void cratingDatabaseSchema() {
         log.info("Creating database schema");
-        databaseManager.executeSql(table, null, null, null);
+        sqlUpdate.update(table);
     }
 
     public void insertRows(List<Rss> rssList) {
-        databaseManager.executeSql(insert, rssList, (preparedStatement, rss) -> {
+        sqlInsert.insert(insert, rssList, (preparedStatement, rss) -> {
             preparedStatement.setString(1, rss.getTitle());
             preparedStatement.setString(2, rss.getDescription());
             preparedStatement.setString(3, rss.getUri());
@@ -47,11 +51,11 @@ public class DatabaseService {
                 rss.getPublishedDate() == null ? null : Timestamp.valueOf(rss.getPublishedDate())
             );
             preparedStatement.setTimestamp(5, Timestamp.valueOf(LocalDateTime.now()));
-        }, null);
+        });
     }
 
     public List<Rss> readData() {
-        return databaseManager.executeSql(select, null, null, resultSet ->
+        return sqlSelect.select(select, resultSet ->
             Rss.builder()
                 .description(resultSet.getNString(RssEnum.DESCRIPTION.name()))
                 .uri(resultSet.getNString(RssEnum.URI.name()))
