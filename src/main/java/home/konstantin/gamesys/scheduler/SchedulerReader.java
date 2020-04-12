@@ -24,11 +24,7 @@ public class SchedulerReader {
     @Scheduled(fixedDelayString = "${test-data.rrs.source.schedule.fixed-delay}", initialDelay = 1000)
     public void scheduler() {
         if (enabled) {
-            try {
-                rssService.processRss();
-            }catch (Exception e){
-                log.error("Error while reading rrs", e);
-            }
+            rssService.processRss();
             log.info("Reading complete");
         }
     }

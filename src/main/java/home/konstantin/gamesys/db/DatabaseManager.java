@@ -21,7 +21,7 @@ public abstract class DatabaseManager {
 
     private final ConnectionConfiguration connectionConfiguration;
 
-    private Connection getConnection() throws SQLException {
+    protected Connection getConnection() throws SQLException {
         return DriverManager.getConnection(
             connectionConfiguration.getUrl(),
             connectionConfiguration.getUsername(),

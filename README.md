@@ -1,6 +1,10 @@
 # GameSys test task
 
 This test task consist of one application, which read RSS news from configurable URL, process each news data and store it to database.
+
+List of RSS channels can be found here :
+`https://edition.cnn.com/services/rss/` 
+
 Processing data performed like this :
 Title of the news transformed to uppercase and content of it in reversed order.
 Also all fields trimmed to 1000 letters.

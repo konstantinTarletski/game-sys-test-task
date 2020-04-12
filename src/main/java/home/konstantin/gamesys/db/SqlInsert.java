@@ -23,13 +23,11 @@ public class SqlInsert extends DatabaseManager {
     public <T> List<T> processSql(List<T> parameters, StatementParameterPopulator<T> populator,
         ResultSetReader<T> resultSetReader, PreparedStatement preparedStatement
     ) throws SQLException {
-        if (populator != null && parameters != null) {
-            for (var parameter : parameters) {
-                populator.populate(preparedStatement, parameter);
-                preparedStatement.addBatch();
-            }
-            preparedStatement.executeBatch();
+        for (var parameter : parameters) {
+            populator.populate(preparedStatement, parameter);
+            preparedStatement.addBatch();
         }
+        preparedStatement.executeBatch();
         return null;
     }
 
