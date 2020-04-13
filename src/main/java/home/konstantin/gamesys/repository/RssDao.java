@@ -37,7 +37,7 @@ public class RssDao {
     private Resource select;
 
     @PostConstruct
-    public void cratingDatabaseSchema() {
+    public void createDatabaseSchema() {
         log.info("Creating database schema");
         sqlUpdate.update(table);
     }

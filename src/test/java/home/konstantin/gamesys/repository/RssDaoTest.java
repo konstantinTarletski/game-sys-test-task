@@ -67,7 +67,7 @@ public class RssDaoTest {
     @Test
     public void successfulUpdate() {
         ReflectionTestUtils.setField(rssDao, "table", resource);
-        rssDao.cratingDatabaseSchema();
+        rssDao.createDatabaseSchema();
         verify(sqlUpdate, times(1)).update(notNull());
     }
 
