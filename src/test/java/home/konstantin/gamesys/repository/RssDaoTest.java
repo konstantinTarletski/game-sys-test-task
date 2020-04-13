@@ -25,7 +25,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class DatabaseServiceTest {
+public class RssDaoTest {
 
     @Mock
     private SqlInsert sqlInsert;
@@ -40,7 +40,7 @@ public class DatabaseServiceTest {
     private Resource resource;
 
     @InjectMocks
-    private DatabaseService databaseService;
+    private RssDao rssDao;
 
     @Before
     public void initMocks() {
@@ -51,10 +51,10 @@ public class DatabaseServiceTest {
     public void successfulSelect() {
         var rss = getRrs();
         var rssList = List.of(rss);
-        ReflectionTestUtils.setField(databaseService, "select", resource);
+        ReflectionTestUtils.setField(rssDao, "select", resource);
 
         when(sqlSelect.select(notNull(), (ResultSetReader<Rss>) notNull())).thenReturn(rssList);
-        var result = databaseService.readData();
+        var result = rssDao.readData();
 
         verify(sqlSelect, times(1)).select(notNull(), notNull());
         assertTrue(result.size() == 1);
@@ -66,8 +66,8 @@ public class DatabaseServiceTest {
 
     @Test
     public void successfulUpdate() {
-        ReflectionTestUtils.setField(databaseService, "table", resource);
-        databaseService.cratingDatabaseSchema();
+        ReflectionTestUtils.setField(rssDao, "table", resource);
+        rssDao.cratingDatabaseSchema();
         verify(sqlUpdate, times(1)).update(notNull());
     }
 
@@ -75,8 +75,8 @@ public class DatabaseServiceTest {
     public void successfulInsert() {
         var rss = getRrs();
         var rssList = List.of(rss);
-        ReflectionTestUtils.setField(databaseService, "insert", resource);
-        databaseService.insertRows(rssList);
+        ReflectionTestUtils.setField(rssDao, "insert", resource);
+        rssDao.insertRows(rssList);
         verify(sqlInsert, times(1)).insert(notNull(), eq(rssList), notNull());
     }
 

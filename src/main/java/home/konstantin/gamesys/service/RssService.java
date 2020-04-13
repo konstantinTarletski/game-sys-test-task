@@ -1,6 +1,6 @@
 package home.konstantin.gamesys.service;
 
-import home.konstantin.gamesys.repository.DatabaseService;
+import home.konstantin.gamesys.repository.RssDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -13,11 +13,11 @@ import java.util.stream.Collectors;
 public class RssService {
 
     private final RssReader rssReader;
-    private final DatabaseService databaseService;
+    private final RssDao rssDao;
     private final RssProcessor rssProcessor;
 
     public void processRss() {
-        databaseService.insertRows(
+        rssDao.insertRows(
             rssReader.read().stream()
                 .map(rssProcessor::processRss)
                 .collect(Collectors.toList()));

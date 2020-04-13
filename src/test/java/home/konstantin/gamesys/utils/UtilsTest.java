@@ -1,7 +1,13 @@
-package home.konstantin.gamesys.utils;
+package home.konstantin.gamesys.service;
 
-import org.junit.jupiter.api.Test;
+import home.konstantin.gamesys.utils.Utils;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.core.io.Resource;
 
+import java.io.IOException;
 import java.time.ZoneId;
 import java.util.Date;
 
@@ -10,14 +16,36 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class UtilsTest {
 
+    @Mock
+    private Resource resource;
+
+    @Before
+    public void initMocks() {
+        MockitoAnnotations.initMocks(this);
+    }
+
     @Test
-    public void testJavaDateToLocalDateTime() {
+    public void testJavaDateToLocalDateTimeNull() {
+        assertNull(Utils.javaDateToLocalDateTime(null));
+    }
+
+    @Test
+    public void testJavaDateToLocalDateTimeSuccess() {
         var date = new Date();
         var dateTime = date.toInstant()
             .atZone(ZoneId.systemDefault())
             .toLocalDateTime();
         assertEquals(Utils.javaDateToLocalDateTime(date), dateTime);
-        assertNull(Utils.javaDateToLocalDateTime(null));
+    }
+
+    @Test
+    public void testResourceAsString() throws IOException {
+        assertNull(Utils.resourceAsString(null));
+    }
+
+    @Test(expected = IOException.class)
+    public void testResourceAsStringIOException() throws IOException {
+        assertNull(Utils.resourceAsString(resource));
     }
 
 }

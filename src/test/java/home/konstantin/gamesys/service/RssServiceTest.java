@@ -1,7 +1,7 @@
 package home.konstantin.gamesys.service;
 
 import home.konstantin.gamesys.model.Rss;
-import home.konstantin.gamesys.repository.DatabaseService;
+import home.konstantin.gamesys.repository.RssDao;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -21,7 +21,7 @@ public class RssServiceTest {
     private RssReader rssReader;
 
     @Mock
-    private DatabaseService databaseService;
+    private RssDao rssDao;
 
     @Mock
     private RssProcessor rssProcessor;
@@ -46,7 +46,7 @@ public class RssServiceTest {
 
         verify(rssReader, times(1)).read();
         verify(rssProcessor, times(1)).processRss(rss);
-        verify(databaseService, times(1)).insertRows(rssList);
+        verify(rssDao, times(1)).insertRows(rssList);
     }
 
     public Rss getRrs() {
