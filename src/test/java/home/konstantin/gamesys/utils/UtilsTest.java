@@ -54,7 +54,7 @@ public class UtilsTest {
     }
 
     @Test
-    public void testResourceAsStringSucess() throws IOException {
+    public void testResourceAsStringSuccess() throws IOException {
         when(resource.getInputStream())
             .thenReturn(new ByteArrayInputStream(TEXT.getBytes(StandardCharsets.UTF_8)));
         var text = Utils.resourceAsString(resource);
