@@ -12,6 +12,18 @@ RSS news can be processed manually or by scheduler, which delay may be also conf
 
 This application have API to control it and view results.
 
+## Architecture 
+
+I was choosing between "JDBCTemplate" and "ResultSet" and decided to build application on "ResultSet". It seems to me more "interesting".
+Knowing if that will be a "real" application maybe I will decide to use "JDBCTemplate” or some other technology. But for test task "ResultSet" is more interesting, I think.
+
+For not having code duplication with opening and close connection and  "Statement" I create "base" class for every SQL operation. That is why structure become not usual. 
+
+But not usual not means bad. Application have flexible structure and we can easy add new DAO for other tables if we need in future. Application structure will not create new "SQL instances" if we add new DAO.
+
+Of course, there can be done some improvements. For example, for now it is impossible to pass parameters for "SELECT" operations and "SQL" can be taken only from "Resource" what is not very convenient. But there was no need to add more complex solutions. Because this task has certain requirements. And, for example, having only 3 different SQLs, put 2 of them in one place and 1 to another, not logical in scope of this task.
+
+
 ## Used technologies and tools
 
 * Java 11
@@ -26,7 +38,7 @@ This application have API to control it and view results.
 
 ## Rss-reader API
 
-* To process RSS news manually you can call this endpoint :
+* To process RSS news manually you can call this endpoint:
     `GET http://localhost:8815/api/api/rss-reader/process-rss`.
     It will execute same logic, that scheduler do. But only once.
 
@@ -82,4 +94,4 @@ I covered in tests service, repository and also "DB" layer, where is written log
 
 For testing I use "Junit" like it written in task description, but in extra I was using  "powermock" for "mock" static methods and have ability to cover all "service", "repository" and "db" package methods.
 
-As I understand from test task that there is not need to write "integration tests", so I did not write them. 
+Integration tests I did only for "RssDao" because others classes from service layer can be tested without application context.
