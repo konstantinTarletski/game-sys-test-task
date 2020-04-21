@@ -34,12 +34,16 @@ Of course, there can be done some improvements. For example, for now it is impos
 * Lombok
 * Docker
 * Docker-compose
+* Swagger
 * Some other small spring embedded things
 
 ## Rss-reader API
 
+All API available on swagger by link:
+`localhost:8815/swagger-ui.html`
+
 * To process RSS news manually you can call this endpoint:
-    `GET http://localhost:8815/api/api/rss-reader/process-rss`.
+    `GET http://localhost:8815/api/rss-reader/process-rss`.
     It will execute same logic, that scheduler do. But only once.
 
 * To enable/disable scheduler for reading RSS news from you can use this endpoint.
@@ -49,7 +53,7 @@ Of course, there can be done some improvements. For example, for now it is impos
     Where enabled can be true or false
 
 * To view last 10 database records you can use this endpoint. 
-    `GET http://localhost:8815/api/api/rss-reader/read-last-items`
+    `GET http://localhost:8815/api/rss-reader/read-last-items`
 
 ## How to run project
 

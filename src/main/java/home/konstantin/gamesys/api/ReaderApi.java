@@ -4,6 +4,8 @@ import home.konstantin.gamesys.model.Rss;
 import home.konstantin.gamesys.scheduler.SchedulerReader;
 import home.konstantin.gamesys.repository.RssDao;
 import home.konstantin.gamesys.service.RssService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +19,7 @@ import static java.lang.String.format;
 
 @Slf4j
 @RestController
+@Api(value = "GameSys rss-reader", tags = "rss-reader")
 @RequestMapping("${application.api.base-mapping}")
 @RequiredArgsConstructor
 public class ReaderApi {
@@ -25,14 +28,16 @@ public class ReaderApi {
     private final RssService rssService;
     private final RssDao rssDao;
 
+    @ApiOperation("Enable scheduler")
     @GetMapping(path = "/enable-scheduler")
     public String enableSender(@RequestParam boolean enabled) {
-        schedulerReader.setEnabled(enabled);
-        var logText = format("Scheduler status now = %s", schedulerReader.isEnabled());
+        schedulerReader.getStatus().set(enabled);
+        var logText = format("Scheduler status now = %s", schedulerReader.getStatus().get());
         log.info(logText);
         return logText;
     }
 
+    @ApiOperation("Processing RRS 1 time")
     @GetMapping(path = "/process-rss")
     public String insertRrs() {
         var logText = "Processing RRS manually";
@@ -41,6 +46,7 @@ public class ReaderApi {
         return logText;
     }
 
+    @ApiOperation("Read last 10 rows from database")
     @GetMapping(path = "/read-last-items")
     public List<Rss> readLastItems() {
         log.info("Reading last 10 rows from database");

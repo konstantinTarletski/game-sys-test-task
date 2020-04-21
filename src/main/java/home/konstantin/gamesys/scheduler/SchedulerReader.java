@@ -9,6 +9,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 @Slf4j
 @Component
 @EnableScheduling
@@ -19,11 +21,11 @@ public class SchedulerReader {
 
     @Getter
     @Setter
-    private volatile boolean enabled = false;
+    private volatile AtomicBoolean status = new AtomicBoolean(false);
 
     @Scheduled(fixedDelayString = "${test-data.rrs.source.schedule.fixed-delay}", initialDelay = 1000)
     public void scheduler() {
-        if (enabled) {
+        if (status.get()) {
             rssService.processRss();
             log.info("Reading complete");
         }
