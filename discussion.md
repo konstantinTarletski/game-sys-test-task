@@ -76,6 +76,9 @@ Here is my answer to your answer :)
 17. Test coverage might be better, testing could be improved. --- Testing and coverage always can be improved :) I show all kind of tests. and decided that it is enough fo show that I can write any kind of tests.
 18. App is run under root user inside of docker --- Yes. Decided not to spend time for creating new user. So. Agree
 
+# Some conversation
+...
+...
 # Dmitri Answer
 
 Hello
