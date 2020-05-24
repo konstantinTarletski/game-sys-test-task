@@ -54,13 +54,18 @@ All API available on swagger by link:
 
 * To view last 10 database records you can use this endpoint. 
     `GET http://localhost:8815/api/rss-reader/read-last-items`
+    
+__All request have `basic authentication` and password is `e77d9295f66e4ea9b5aac7bc4ede3dd`__
+
+__Use swagger `Authorize` button in top right corner !!!__ 
 
 ## How to run project
 
-This project can be run in 2 ways:
+This project can be run in 3 ways:
 * With docker-compose
 * Like local applications
-
+* Deployed to cloud (Google kubernetes Engine) - http://34.91.147.128/swagger-ui.html
+  
 ### Run with docker-compose
 
 To run this application with "docker-compose" you need just run the command :
@@ -99,3 +104,37 @@ I covered in tests service, repository and also "DB" layer, where is written log
 For testing I use "Junit" like it written in task description, but in extra I was using  "powermock" for "mock" static methods and have ability to cover all "service", "repository" and "db" package methods.
 
 Integration tests I did only for "RssDao" because others classes from service layer can be tested without application context.
+
+
+### Google Kubernetes
+
+I deployed this task to GKE - Google Kubernetes Engine.
+
+I created cluster on zone `europe-west4-b` because in this zone I can use more resources, if this cluster I will use for other projects.
+
+Also this zone "not far" to Estonia, hope this will minimize delays for cluster traffic for me.
+
+After setup `gcloud` I used this commands to put this project to cloud:
+
+```
+docker build -t gcr.io/kostja-test-project/game-sys-test-task .
+gcloud auth configure-docker
+docker push gcr.io/kostja-test-project/game-sys-test-task
+kubectl create deployment game-sys-test-task --image=gcr.io/kostja-test-project/game-sys-test-task
+kubectl expose deployment game-sys-test-task --type=LoadBalancer --port 80 --target-port 8815
+```
+
+After that this task is available by link :
+`http://34.91.147.128/swagger-ui.html`
+
+I "expose" this task like "LoadBalancer", I did not use "ingres". I did so to simplify configuration, and because for now this project is only in the cloud.
+And there is no any need to do ingres because no any resources need to be "expose" from cluster.
+In future I will do ingres, for sure.
+
+### Security
+
+I decided to use `basic authentication` because it is not hard to implement, shows my knowledge of Spring Security and it is enough for ths project.
+I understand that `basic authentication` not recommended to use, especially with `http` (not `https`). But this project do not have any confidential or useful data.
+So nothing can be stolen or spoiled in this project.
+Also implementing JWT authentication much more complex. Ii is need to implement JWT token encoding/decoding/validation/issue. Also it is needed to implement issue of `refresh token` and think about logout of the user.
+All this can be more complex than this task is. So I decided not no complicate this test task.
