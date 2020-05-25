@@ -125,7 +125,7 @@ kubectl expose deployment game-sys-test-task --type=LoadBalancer --port 80 --tar
 ```
 
 After that this task is available by link :
-`http://34.91.147.128/swagger-ui.html`
+`http://35.204.180.8/swagger-ui.html`
 
 I "expose" this task like "LoadBalancer", I did not use "ingres". I did so to simplify configuration, and because for now this project is only in the cloud.
 And there is no any need to do ingres because no any resources need to be "expose" from cluster.
