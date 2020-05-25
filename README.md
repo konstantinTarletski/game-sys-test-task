@@ -55,7 +55,7 @@ All API available on swagger by link:
 * To view last 10 database records you can use this endpoint. 
     `GET http://localhost:8815/api/rss-reader/read-last-items`
     
-__All request have `basic authentication` and password is `e77d9295f66e4ea9b5aac7bc4ede3dd`__
+__All request have `basic authentication` and username is `birkle` password is `e77d9295f66e4ea9b5aac7bc4ede3dd`__
 
 __Use swagger `Authorize` button in top right corner !!!__ 
 
