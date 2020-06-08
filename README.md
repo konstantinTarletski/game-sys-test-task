@@ -64,7 +64,7 @@ __Use swagger `Authorize` button in top right corner !!!__
 This project can be run in 3 ways:
 * With docker-compose
 * Like local applications
-* Deployed to cloud (Google kubernetes Engine) - http://35.204.180.8/swagger-ui.html (Cluster stopped for now. Ask me to run it)
+* Deployed to cloud (Google kubernetes Engine) - http://34.90.176.189/swagger-ui.html
   
 ### Run with docker-compose
 
@@ -125,7 +125,7 @@ kubectl expose deployment game-sys-test-task --type=LoadBalancer --port 80 --tar
 ```
 
 After that this task is available by link :
-`http://35.204.180.8/swagger-ui.html` (Cluster stopped for now. Ask me to run it)
+`http://34.90.176.189/swagger-ui.html`
 
 I "expose" this task like "LoadBalancer", I did not use "ingres". I did so to simplify configuration, and because for now this project is only in the cloud.
 And there is no any need to do ingres because no any resources need to be "expose" from cluster.
