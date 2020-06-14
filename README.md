@@ -40,7 +40,7 @@ Of course, there can be done some improvements. For example, for now it is impos
 ## Rss-reader API
 
 All API available on swagger by link:
-`localhost:8815/swagger-ui.html`
+`localhost:8815/swagger-ui.html` (Cluster stopped. Ask me to run, if needed.)
 
 * To process RSS news manually you can call this endpoint:
     `GET http://localhost:8815/api/rss-reader/process-rss`.
@@ -125,7 +125,7 @@ kubectl expose deployment game-sys-test-task --type=LoadBalancer --port 80 --tar
 ```
 
 After that this task is available by link :
-`http://34.90.176.189/swagger-ui.html`
+`http://34.90.176.189/swagger-ui.html` (Cluster stopped. Ask me to run, if needed.)
 
 I "expose" this task like "LoadBalancer", I did not use "ingres". I did so to simplify configuration, and because for now this project is only in the cloud.
 And there is no any need to do ingres because no any resources need to be "expose" from cluster.
