@@ -8,6 +8,7 @@ WORKDIR /app
 COPY gradle /app/gradle
 COPY gradlew /app
 COPY build.gradle /app
+RUN yum install -y dos2unix
 RUN dos2unix gradlew && chmod +x gradlew && ./gradlew download
 
 # Build artifact
