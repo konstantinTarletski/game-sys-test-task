@@ -1,5 +1,6 @@
 #Prepare build environment
-FROM openjdk:11-jdk-slim AS build
+#FROM openjdk:11-jdk-slim AS build
+FROM amazoncorretto:11-al2023-headless
 RUN apt-get update && apt-get install dos2unix
 WORKDIR /app
 
