@@ -1,0 +1,50 @@
+name: Push to ECR
+
+env:
+  AWS_REGION: us-east-1
+  ECR_REPOSITORY: game-sys-test-task
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main" ] # Сработает, когда вы сделаете push в ветку main
+
+permissions:
+  id-token: write # Это разрешает использовать OIDC (то, что мы делали в Terraform)
+  contents: read
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 1. Авторизация в AWS (заменяет ввод логина и пароля)
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::988182271356:role/ecr-pusher_repo_game-sys-test-task
+          aws-region: eu-central-1
+
+      # 2. Логин в ваш личный магазин образов (ECR)
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      # 3. Сборка Docker-образа и отправка его в AWS
+      - name: Build and Push
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: my-app-repo # Имя вашего ECR репозитория
+          IMAGE_TAG: ${{ github.sha }} 
+        run: |
+          # 1. Сборка образа с уникальным тегом (хешем)
+          docker build -t $REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          
+          # 2. Создаем копию этого образа с тегом latest
+          docker tag $REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $REGISTRY/$ECR_REPOSITORY:latest
+          
+          # 3. Пушим оба тега в AWS
+          docker push $REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker push $REGISTRY/$ECR_REPOSITORY:latest
