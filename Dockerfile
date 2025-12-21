@@ -1,14 +1,14 @@
 #Prepare build environment
 #FROM openjdk:11-jdk-slim AS build
 FROM amazoncorretto:11-al2023-headless AS build
-RUN apt-get update && apt-get install dos2unix
+RUN yum install -y dos2unix
 WORKDIR /app
 
 # Download dependencies
 COPY gradle /app/gradle
 COPY gradlew /app
 COPY build.gradle /app
-RUN yum install -y dos2unix
+
 RUN dos2unix gradlew && chmod +x gradlew && ./gradlew download
 
 # Build artifact
