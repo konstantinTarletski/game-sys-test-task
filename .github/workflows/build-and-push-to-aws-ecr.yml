@@ -3,8 +3,8 @@ name: Push to ECR and Update ECS
 env:
   AWS_REGION: eu-central-1
   ECR_REPOSITORY: game-sys-test-task
-  ECS_CLUSTER: demo-cluster              # Проверь имя кластера в Terraform
-  ECS_SERVICE: game-sys-service           # Проверь имя сервиса в Terraform
+  ECS_CLUSTER: Cluster_dev
+  ECS_SERVICE: game-sys-service
 
 on:
   workflow_dispatch:
@@ -25,7 +25,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::988182271356:role/ecr-pusher_repo_game-sys-test-task
-          aws-region: $AWS_REGION
+          aws-region:  ${{ env.AWS_REGION }}
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
