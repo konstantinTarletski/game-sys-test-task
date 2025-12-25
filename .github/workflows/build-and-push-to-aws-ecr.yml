@@ -4,7 +4,7 @@ env:
   AWS_REGION: eu-central-1
   ECR_REPOSITORY: game-sys-test-task
   ECS_CLUSTER: Cluster_dev
-  ECS_SERVICE: game-sys-service
+  ECS_SERVICE: game-sys-test-taskdev_service
 
 on:
   workflow_dispatch:
@@ -40,7 +40,13 @@ jobs:
           
           docker push $REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $REGISTRY/$ECR_REPOSITORY:latest
-
+          
+      - name: Configure AWS credentials for ECS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::988182271356:role/ecs-deployer-role-game-sys-test-task
+          aws-region: ${{ env.AWS_REGION }}
+          
       - name: Update ECS Service
         run: |
           echo "Checking if ECS Service exists..."
