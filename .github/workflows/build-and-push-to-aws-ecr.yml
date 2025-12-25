@@ -50,7 +50,6 @@ jobs:
       - name: Update ECS Service
         run: |
           echo "Checking if ECS Service exists..."
-          # Пытаемся получить описание сервиса. Если его нет, команда вернет ошибку, которую мы поймаем.
           SERVICE_STATUS=$(aws ecs describe-services --cluster ${{ env.ECS_CLUSTER }} --services ${{ env.ECS_SERVICE }} --query "services[0].status" --output text 2>&1 || true)
           
           if [ "$SERVICE_STATUS" == "ACTIVE" ]; then
