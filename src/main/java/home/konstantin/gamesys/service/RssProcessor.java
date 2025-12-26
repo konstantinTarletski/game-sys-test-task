@@ -8,26 +8,29 @@ import org.springframework.stereotype.Service;
 @Service
 public class RssProcessor {
 
-    private final int DB_ROW_LENGHT = 1000;
+    private final int DB_ROW_LENGTH = 1000;
 
-    public Rss processRss(Rss rss){
+    public Rss processRss(Rss rss) {
         rss.setTitle(processTitle(rss.getTitle()));
         rss.setDescription(processDescription(rss.getDescription()));
         rss.setUri(trimToSize(rss.getUri()));
         return rss;
     }
 
-    private String processTitle(String title){
+    private String processTitle(String title) {
         return trimToSize(title.toUpperCase());
     }
 
-    private String processDescription(String description){
-        StringBuffer buffer = new StringBuffer(description);
-        return trimToSize(buffer.reverse().toString());
+    private String processDescription(String description) {
+        if (description != null) {
+            StringBuilder buffer = new StringBuilder(description);
+            return trimToSize(buffer.reverse().toString());
+        }
+        return "";
     }
 
-    private String trimToSize(String input){
-        return input.substring(0, Math.min(input.length(), DB_ROW_LENGHT));
+    private String trimToSize(String input) {
+        return input.substring(0, Math.min(input.length(), DB_ROW_LENGTH));
     }
 
 }
