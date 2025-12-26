@@ -58,7 +58,9 @@ jobs:
               --cluster ${{ env.ECS_CLUSTER }} \
               --service ${{ env.ECS_SERVICE }} \
               --force-new-deployment \
-              --region ${{ env.AWS_REGION }}
+              --region ${{ env.AWS_REGION }} \
+              --query "service.deployments[?status=='PRIMARY'].{ID:id, Status:status, CreatedAt:createdAt}" \
+              --output table
           else
             echo "Service not found or not active (Status: $SERVICE_STATUS). Skipping update. Terraform will create it on next apply."
           fi
