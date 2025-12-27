@@ -17,4 +17,5 @@ RUN dos2unix gradlew && chmod +x gradlew && ./gradlew build -x test
 # Create minimal image from build artifact
 FROM amazoncorretto:11-al2023-headless
 COPY --from=build /app/build/libs/*.jar /app/
-ENTRYPOINT ["java", "-jar", "/app/rss-reader-0.0.1-SNAPSHOT.jar"]
+#ENTRYPOINT ["java", "-jar", "/app/rss-reader-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["sh", "-c", "echo 127.0.0.1 $(hostname) >> /etc/hosts && java -jar /app/rss-reader-0.0.1-SNAPSHOT.jar"]
