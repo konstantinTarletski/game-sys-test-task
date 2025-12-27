@@ -15,7 +15,11 @@ public class H2Configuration {
     public Server inMemoryH2DatabaseServer() throws SQLException {
         log.info("H2 server created");
         System.setProperty("h2.bindAddress", "0.0.0.0"); //fix for "amazoncorretto:11-al2023-headless"
-        return Server.createTcpServer("-tcp", "-tcpAllowOthers", "-tcpPort", "9090");
+        return Server.createTcpServer(
+                "-tcp", "-tcpAllowOthers",
+                "-tcpPort", "9090",
+                "-tcpAddress", "0.0.0.0"
+        );
 
     }
 
