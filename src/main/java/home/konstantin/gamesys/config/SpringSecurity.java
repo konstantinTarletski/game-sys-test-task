@@ -29,6 +29,7 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers(
                         "/",
                         "/csrf",
+                        "/h2-console/**",
                         "/v2/api-docs",
                         "/swagger-resources/**",
                         "/swagger-ui.html",
@@ -36,7 +37,15 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
                 ).permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .httpBasic().authenticationEntryPoint(customAuthenticationEntryPoint).and()
+                // Разрешаем H2 отображать контент в фреймах (решает проблему "кривого" вида)
+                .headers()
+                .frameOptions().sameOrigin()
+                .and()
+                .csrf()
+                .ignoringAntMatchers("/h2-console/**")
+                .and()
+                .httpBasic().authenticationEntryPoint(customAuthenticationEntryPoint)
+                .and()
                 .formLogin().disable();
     }
 
