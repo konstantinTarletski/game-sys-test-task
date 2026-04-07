@@ -66,8 +66,7 @@ This project can be run in 3 ways:
 * Like local applications
 * Deployed to cloud (AWS) -https://game-sys.tarlekon.click/swagger-ui.html
   This is a separate project with building all infrastructure on AWS.
-  Network, ECR, ECS, ALB, Domain (HTTPS) ... 
-
+  Network, ECR, ECS, ALB, Domain (HTTPS) ...
 
 ### Run with docker-compose
 
@@ -108,31 +107,6 @@ For testing I use "Junit" like it written in task description, but in extra I wa
 
 Integration tests I did only for "RssDao" because others classes from service layer can be tested without application context.
 
-
-### Google Kubernetes
-
-I deployed this task to GKE - Google Kubernetes Engine.
-
-I created cluster on zone `europe-west4-b` because in this zone I can use more resources, if this cluster I will use for other projects.
-
-Also this zone "not far" to Estonia, hope this will minimize delays for cluster traffic for me.
-
-After setup `gcloud` I used this commands to put this project to cloud:
-
-```
-docker build -t gcr.io/kostja-test-project/game-sys-test-task .
-gcloud auth configure-docker
-docker push gcr.io/kostja-test-project/game-sys-test-task
-kubectl create deployment game-sys-test-task --image=gcr.io/kostja-test-project/game-sys-test-task
-kubectl expose deployment game-sys-test-task --type=LoadBalancer --port 80 --target-port 8815
-```
-
-After that this task is available by link :
-`http://34.90.176.189/swagger-ui.html` (Cluster stopped. Ask me to run, if needed.)
-
-I "expose" this task like "LoadBalancer", I did not use "ingres". I did so to simplify configuration, and because for now this project is only in the cloud.
-And there is no any need to do ingres because no any resources need to be "expose" from cluster.
-In future I will do ingres, for sure.
 
 ### Security
 
