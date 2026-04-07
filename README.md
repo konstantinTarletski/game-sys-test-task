@@ -64,8 +64,11 @@ __Use swagger `Authorize` button in top right corner !!!__
 This project can be run in 3 ways:
 * With docker-compose
 * Like local applications
-* Deployed to cloud (Google kubernetes Engine) - http://34.90.176.189/swagger-ui.html
-  
+* Deployed to cloud (AWS) -https://game-sys.tarlekon.click/swagger-ui.html
+  This is a separate project with building all infrastructure on AWS.
+  Network, ECR, ECS, ALB, Domain (HTTPS) ... 
+
+
 ### Run with docker-compose
 
 To run this application with "docker-compose" you need just run the command :

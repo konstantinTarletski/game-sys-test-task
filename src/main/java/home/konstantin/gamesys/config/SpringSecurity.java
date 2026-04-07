@@ -37,7 +37,6 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter {
                 ).permitAll()
                 .anyRequest().authenticated()
                 .and()
-                // Разрешаем H2 отображать контент в фреймах (решает проблему "кривого" вида)
                 .headers()
                 .frameOptions().sameOrigin()
                 .and()
