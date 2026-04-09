@@ -64,9 +64,13 @@ __Use swagger `Authorize` button in top right corner !!!__
 This project can be run in 3 ways:
 * With docker-compose
 * Like local applications
-* Deployed to cloud (AWS) -https://game-sys.tarlekon.click/swagger-ui.html
+* Deployed to cloud (AWS) 
   This is a separate project with building all infrastructure on AWS.
   Network, ECR, ECS, ALB, Domain (HTTPS) ...
+  - https://game-sys.tarlekon.click/swagger-ui.html
+  - https://game-sys.tarlekon.click/h2-console (check JDBC URL)
+ 
+
 
 ### Run with docker-compose
 
